@@ -1,0 +1,128 @@
+.container-svx {
+    display: grid;
+    grid-template-columns: auto minmax(0, 800px);
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &:has(>:only-child) {
+        max-width: 800px;
+        grid-template-columns: 1fr;
+    }
+
+    .container-toc {
+        max-width: 400px;
+        position: sticky;
+        top: 0;
+        overflow: auto;
+        max-height: calc(100vh - var(--scroll-toc-top, 0px));
+
+        nav.toc {
+
+            .title {
+                font-variant: all-small-caps;
+                font-size: x-large;
+            }
+
+            .list {
+                list-style: none;
+                padding-left: 0;
+
+                a {
+                    text-decoration: none;
+                    color: inherit;
+                    display: block;
+                    font-family: monospace;
+                    /* padding-left: calc(var(--indent) * 2.75ch); */
+
+                    .section {
+
+                        font-size: smaller;
+
+                        &::before {
+                            content: "❯…\00a0";
+                        }
+                    }
+
+                    .index {
+                        font-weight: bold;
+                        font-size: smaller;
+                        word-break: break-all;
+
+                        &::after {
+                            content: " ";
+                        }
+                    }
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+        }
+    }
+
+    .container-content {
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: 1.25em;
+            margin: 1.5em 0 1em;
+            font-weight: normal;
+
+            .section {
+                font-size: smaller;
+
+                &::after {
+                    content: " ";
+                }
+
+                .link {
+                    font-family: inherit;
+                    text-decoration: none;
+                    color: inherit;
+
+                    &::before {
+                        content: "❯…";
+                    }
+
+                    *:hover>.section & {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            .index {
+                font-size: smaller;
+
+                &::after {
+                    content: " ";
+                }
+            }
+        }
+    }
+
+    blockquote {
+        border-left: 2px solid rgba(128, 128, 128, 0.5);
+        padding-left: 1ch;
+    }
+}
+
+@media (max-width: 1200px) {
+    .container-svx {
+        grid-template-columns: 1fr;
+        gap: 0;
+        max-width: 800px;
+
+        .container-toc {
+            max-width: initial;
+            position: initial;
+            max-height: initial;
+        }
+    }
+}

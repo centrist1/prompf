@@ -1,0 +1,21 @@
+---
+title: ✦ Prompf
+subtitle: Prompt the Life You Want
+author: Alin “Al” Are
+---
+
+# Show that this project is in construction
+
+⌛ In progress…
+
+# Add title, subtitle and author
+
+# Add timeline with the changes at the top of the page
+
+# Define prompf
+
+> **prompf** (verb): to prompt the life you want. <br>
+
+**PROMPF** combines **PROMPT** with **LIFE**: replace the **T** in *prompt* with the **F** from *life*.
+
+# Add table of contents named prompts
