@@ -170,7 +170,7 @@ export default {
                                 } else if (yamlKey === 'subtitle') {
                                     const value = yamlValue.trim();
                                     const id = makeId(value);
-                                    headerContent += `<h2 id="${id}" style="font-weight:bold"><a style="color:inherit;text-decoration:none" onclick={(event)=>{event.preventDefault();document.querySelector(".container-toc")?.scrollIntoView()}} href="/"><small>❯…</small> ${value}</a></h2>`
+                                    headerContent += `<h2 id="${id}" style="font-weight:bold"><a style="color:inherit;text-decoration:none" onclick={(event)=>{event.preventDefault();document.querySelector(".container-toc")?.scrollIntoView()}} href="/">${value.replace(/(❯…)/,'<small>$1</small>')}</a></h2>`
                                 } else if (yamlKey === 'author') {
                                     const value = yamlValue.trim();
                                     headerContent += `<h3 class="author" style="font-weight:normal">By ${value}</h3>`;
