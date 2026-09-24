@@ -157,9 +157,52 @@ export default {
 
                         walk(tree, {});
 
-                        let headerContent = "";
+                        let treeChildLength = tree.children?.length || 0;
+
+                        if (treeChildLength > 0 && !nodeYaml || treeChildLength > 1) {
+
+                            if (nodeScript) {
+                                const scriptContent = nodeScript.value || "";
+                                if (!/import\s+I\s+from\s+["']\..\/dynamic\.svelte['"]/.test(scriptContent)) {
+
+                                    tree.children![tree.children!.indexOf(nodeScript)] = {
+                                        type: "html",
+                                        value: scriptContent.replace(/<script>/, `<script>\nimport I from '../../dynamic/I.svelte';\n`),
+                                    };
+                                }
+
+                            } else {
+                                tree.children!.splice(nodeYaml ? tree.children!.indexOf(nodeYaml) + 1 : 0, 0, {
+                                    type: "html",
+                                    value: `<script>\nimport I from '../../dynamic/I.svelte';\n</script>`,
+                                });
+                            }
+
+                            let tocMarkup = '';
+                            let theEnd = '';
+                            if (buildToc.length > 1 || buildToc[0]?.children?.length) {
+                                tocMarkup = `<div class="container-toc"><I p="./Toc.svelte" list='${JSON.stringify(buildToc).replace(/{/g, "&#123").replace(/}/g, "&#125")}' /></div>`;
+                                theEnd = '<div class="the-end" style="text-align:center;padding:1em 0 calc(100vh - 2em);line-height:1">⁂</div>';
+                            }
+
+                            tree.children!.splice((nodeScript ? tree.children!.indexOf(nodeScript) : nodeYaml ? tree.children!.indexOf(nodeYaml) : -1) + 1, 0, {
+                                type: "html",
+                                value: `<div class="body-svx">`,
+                            }, {
+                                type: "html",
+                                value: `${tocMarkup}<div class="container-content">`,
+                            });
+
+                            tree.children!.push({
+                                type: "html",
+                                value: `${theEnd}</div></div>`,
+                            });
+
+                        }
 
                         if (nodeYaml) {
+
+                            let headerContent = "";
 
                             nodeYaml.value!.split("\n").forEach((line) => {
                                 const [yamlKey, yamlValue] = line.split(/:(.*)/);
@@ -170,7 +213,7 @@ export default {
                                 } else if (yamlKey === 'subtitle') {
                                     const value = yamlValue.trim();
                                     const id = makeId(value);
-                                    headerContent += `<h2 id="${id}" style="font-weight:bold"><a style="color:inherit;text-decoration:none" onclick={(event)=>{event.preventDefault();document.querySelector(".container-toc")?.scrollIntoView()}} href="/">${value.replace(/(❯…)/,'<small>$1</small>')}</a></h2>`
+                                    headerContent += `<h2 id="${id}" style="font-weight:bold"><a style="color:inherit;text-decoration:none" onclick={(event)=>{event.preventDefault();document.querySelector(".container-toc")?.scrollIntoView()}} href="/">${value.replace(/(❯…)/, '<small>$1</small>')}</a></h2>`
                                 } else if (yamlKey === 'author') {
                                     const value = yamlValue.trim();
                                     headerContent += `<h3 class="author" style="font-weight:normal">By ${value}</h3>`;
@@ -179,47 +222,6 @@ export default {
                                 }
                             });
 
-                        }
-
-                        if (nodeScript) {
-                            const scriptContent = nodeScript.value || "";
-                            if (!/import\s+I\s+from\s+["']\..\/dynamic\.svelte['"]/.test(scriptContent)) {
-
-                                tree.children![tree.children!.indexOf(nodeScript)] = {
-                                    type: "html",
-                                    value: scriptContent.replace(/<script>/, `<script>\nimport I from '../../dynamic/I.svelte';\n`),
-                                };
-                            }
-
-
-                        } else {
-                            tree.children!.splice(nodeYaml ? tree.children!.indexOf(nodeYaml) + 1 : 0, 0, {
-                                type: "html",
-                                value: `<script>\nimport I from '../../dynamic/I.svelte';\n</script>`,
-                            });
-                        }
-
-                        let tocMarkup = '';
-                        let theEnd = '';
-                        if (buildToc.length > 1 || buildToc[0]?.children?.length) {
-                            tocMarkup = `<div class="container-toc"><I p="./Toc.svelte" list='${JSON.stringify(buildToc).replace(/{/g, "&#123").replace(/}/g, "&#125")}' /></div>`;
-                            theEnd = '<div class="the-end" style="text-align:center;padding:1em 0 calc(100vh - 2em);line-height:1">⁂</div>';
-                        }
-
-                        tree.children!.splice((nodeScript ? tree.children!.indexOf(nodeScript) : nodeYaml ? tree.children!.indexOf(nodeYaml) : -1) + 1, 0, {
-                            type: "html",
-                            value: `<div class="container-svx">`,
-                        }, {
-                            type: "html",
-                            value: `${tocMarkup}<div class="container-content">`,
-                        });
-
-                        tree.children!.push({
-                            type: "html",
-                            value: `${theEnd}</div></div>`,
-                        });
-
-                        if (nodeYaml) {
                             tree.children!.splice(tree.children!.indexOf(nodeYaml) + 1, 0,
                                 {
                                     type: "html",
