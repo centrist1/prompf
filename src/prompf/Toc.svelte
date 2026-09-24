@@ -25,7 +25,7 @@
 {#if list}
   {@const toc: Heading[] = JSON.parse(list || "[]")}
   <nav class="toc">
-    <h1 class="title">Prompts</h1>
+    <h1 class="title">Prompfs</h1>
     {#if toc.length}
       {@render level(toc)}
     {:else}
