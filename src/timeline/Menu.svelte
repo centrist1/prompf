@@ -4,7 +4,7 @@
 
 {#if $menuItems.length > 1}
     <div class="center">
-        Evolution: <select
+        ƒ› Evolve: <select
             name="timeline"
             aria-label="Timeline"
             bind:value={$selectedMenuItem}
