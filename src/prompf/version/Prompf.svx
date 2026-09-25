@@ -1,6 +1,6 @@
 ---
 title: ✦ Prompf
-subtitle: ❯… Prompt the Life You Want
+subtitle: ƒ› Prompt the Life You Want
 ---
 
 # Info prompf
@@ -11,10 +11,8 @@ subtitle: ❯… Prompt the Life You Want
 
 ## Pronounce
 
-/prɒm(p)f/ 
+/prɒm(p)f/
 
 ## Etymology
 
 PROMPT − T + F (from LIFE) = **PROMPF**
-
-**PROMPF** is **PROMPT** brought to **LIFE**: replace **T** in *prompt* with **F** from *life*.

@@ -37,10 +37,8 @@
 
                     .section {
 
-                        font-size: smaller;
-
                         &::before {
-                            content: "❯…\00a0";
+                            content: "ƒ›\00a0";
                         }
                     }
 
@@ -76,7 +74,6 @@
             font-weight: normal;
 
             .section {
-                font-size: smaller;
 
                 &::after {
                     content: " ";
@@ -88,7 +85,7 @@
                     color: inherit;
 
                     &::before {
-                        content: "❯…";
+                        content: "ƒ›";
                     }
 
                     *:hover>.section & {
