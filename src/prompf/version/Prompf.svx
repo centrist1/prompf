@@ -5,11 +5,11 @@ subtitle: ƒ› Prompt the Life You Want
 
 # Info prompf
 
-## Define
+## Definition
 
 **prompf** (verb): to prompt the life you want
 
-## Pronounce
+## Pronunciation
 
 <I p="./prompf/pronunciation/Pronunciation.svelte" />
 
