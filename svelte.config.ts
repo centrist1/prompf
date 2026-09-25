@@ -92,31 +92,6 @@ export default {
                         return unique;
                     }
 
-                    function replacePronunciation(node: Tree) {
-                        if (!node.children) return;
-
-                        const children: Tree[] = [];
-                        node.children.forEach((child) => {
-                            if (child.type !== "text" || !child.value?.includes("/prɒm(p)f/")) {
-                                replacePronunciation(child);
-                                children.push(child);
-                                return;
-                            }
-
-                            child.value.split("/prɒm(p)f/").forEach((part, index, parts) => {
-                                if (part) children.push({ type: "text", value: part });
-                                if (index < parts.length - 1) {
-                                    children.push({
-                                        type: "html",
-                                        value: '<I p="./prompf/Pronunciation.svelte" />',
-                                    });
-                                }
-                            });
-                        });
-
-                        node.children = children;
-                    }
-
                     let nodeYaml: Tree | null = null;
                     const usedIds: Record<string, number> = {};
                     const buildToc: Heading[] = [];
@@ -180,7 +155,6 @@ export default {
 
                         }
 
-                        replacePronunciation(tree);
                         walk(tree, {});
 
                         let treeChildLength = tree.children?.length || 0;
