@@ -35,13 +35,13 @@
         document.documentElement.scrollTop = 0;
       }}
     >
-      <span class="symbol">&#xbb;</span>
+      <span class="symbol">█</span>
     </button>
   </div>
 {/if}
 
 <style>
   .top {
-    right: 1ch;
+    right: 0.5em;
   }
 </style>

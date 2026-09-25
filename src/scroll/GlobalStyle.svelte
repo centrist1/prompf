@@ -3,34 +3,29 @@
     <style id="style-scroll">
       .button-scroll {
         position: fixed;
-        bottom: 0.5ch;
+        bottom: 1em;
         z-index: 100;
+        font-size: smaller;
 
         button {
           background-color: transparent;
           border: none;
           color: inherit;
           cursor: pointer;
-          transition: opacity 400ms;
-          opacity: 0.5;
+          transition: opacity 150ms;
+          opacity: 0.3;
           font-family: monospace;
+          font-size: inherit;
 
           &:hover {
-            opacity: 1;
+            opacity: 0.6;
           }
 
           .symbol {
-            font-size: 1.5rem;
-            line-height: 1;
+            font-size: inherit;
+            line-height: 1em;
             display: block;
-            rotate: -90deg;
           }
-        }
-      }
-      .large {
-        #app > *:not(nav.toc).button-scroll {
-          margin-left: initial;
-          margin-right: initial;
         }
       }
     </style>

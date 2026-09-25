@@ -61,7 +61,7 @@
 {#if showScrollToc}
   <div class="button-scroll toc">
     <button
-      title="Jump to the top of the table of contents"
+      title="Jump to the prompfs menu"
       type="button"
       onpointerdown={() => {
         document
@@ -69,13 +69,13 @@
           ?.scrollIntoView({ block: "start" });
       }}
     >
-      <span class="symbol">&#x203A;</span>
+      <span class="symbol">▛</span>
     </button>
   </div>
 {/if}
 
 <style>
   .toc {
-    right: 4ch;
+    right: 2em;
   }
 </style>
