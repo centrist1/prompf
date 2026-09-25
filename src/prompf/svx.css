@@ -42,8 +42,6 @@
                     }
 
                     .index {
-                        font-weight: bold;
-                        font-size: smaller;
                         word-break: break-all;
 
                         &::after {
