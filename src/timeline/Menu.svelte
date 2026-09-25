@@ -4,17 +4,20 @@
 
 {#if $menuItems.length > 1}
     <div class="center">
-        ƒ› Evolve: <select
-            name="timeline"
-            aria-label="Timeline"
-            bind:value={$selectedMenuItem}
-        >
-            {#each $menuItems as item}
-                <option value={item}>
-                    {toFriendlyDateTime(item)}
-                </option>
-            {/each}
-        </select>
+        <label>
+            ƒ› Timeline:
+            <select
+                name="timeline"
+                aria-label="Timeline"
+                bind:value={$selectedMenuItem}
+            >
+                {#each $menuItems as item}
+                    <option value={item}>
+                        {toFriendlyDateTime(item)}
+                    </option>
+                {/each}
+            </select>
+        </label>
     </div>
     <style>
         .center {
