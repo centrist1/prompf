@@ -32,7 +32,6 @@
                     text-decoration: none;
                     color: inherit;
                     display: block;
-                    font-family: monospace;
                     /* padding-left: calc(var(--indent) * 2.75ch); */
 
                     .section {
@@ -80,7 +79,6 @@
                 }
 
                 .link {
-                    font-family: inherit;
                     text-decoration: none;
                     color: inherit;
 
