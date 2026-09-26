@@ -167,21 +167,21 @@ export default {
 
                                     tree.children![tree.children!.indexOf(nodeScript)] = {
                                         type: "html",
-                                        value: scriptContent.replace(/<script>/, `<script>\nimport I from '../../dynamic/I.svelte';\n`),
+                                        value: scriptContent.replace(/<script>/, `<script>\nimport I from '../dynamic/I.svelte';\n`),
                                     };
                                 }
 
                             } else {
                                 tree.children!.splice(nodeYaml ? tree.children!.indexOf(nodeYaml) + 1 : 0, 0, {
                                     type: "html",
-                                    value: `<script>\nimport I from '../../dynamic/I.svelte';\n</script>`,
+                                    value: `<script>\nimport I from '../dynamic/I.svelte';\n</script>`,
                                 });
                             }
 
                             let tocMarkup = '';
                             let theEnd = '';
                             if (buildToc.length > 1 || buildToc[0]?.children?.length) {
-                                tocMarkup = `<div class="container-toc"><I p="./prompf/Toc.svelte" list='${JSON.stringify(buildToc).replace(/{/g, "&#123").replace(/}/g, "&#125")}' /></div>`;
+                                tocMarkup = `<div class="container-toc"><I p="./svx/Toc.svelte" list='${JSON.stringify(buildToc).replace(/{/g, "&#123").replace(/}/g, "&#125")}' /></div>`;
                                 theEnd = '<div class="the-end" style="text-align:center;padding:1em 0 calc(100vh - 2em);line-height:1">⁂</div>';
                             }
 

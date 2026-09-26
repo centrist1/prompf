@@ -11,7 +11,7 @@ subtitle: ƒ› Prompt the Life You Want
 
 ## Pronunciation
 
-<I p="./prompf/pronunciation/Pronunciation.svelte" />
+<I p="./pronunciation/Pronunciation.svelte" />
 
 ## Etymology
 
