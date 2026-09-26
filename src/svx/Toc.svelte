@@ -29,9 +29,9 @@
     {#if toc.length}
       {@render level(toc)}
     {:else}
-      <p><small style:color="red">Headings not found</small></p>
+      <p><small style:color="#d32f2f">No items found</small></p>
     {/if}
   </nav>
 {:else}
-  <p><small style:color="red">List not found</small></p>
+  <p><small style:color="#d32f2f">List not found</small></p>
 {/if}
