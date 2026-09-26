@@ -92,6 +92,61 @@ export default {
                         return unique;
                     }
 
+                    function walk(node: Tree, parent: Tree) {
+
+                        if (node.type === "heading") {
+
+                            let textFromTransformer = "";
+                            let allFromTransformer = "";
+                            let textContent = "";
+                            let preContent = "";
+
+                            node.children?.forEach((child: Tree) => {
+                                if (child.type === "text") {
+                                    let value = child.value || "";
+                                    textFromTransformer += value;
+                                    allFromTransformer += value;
+                                } else if (child.type === "html") {
+                                    if (child.value) {
+                                        allFromTransformer += child.value;
+                                    }
+                                }
+                            });
+
+                            const id = makeId(textFromTransformer);
+
+                            const { current, ancestors: indexesAncestorsToc } =
+                                setIndexes({
+                                    level: node.depth!,
+                                    containerIndexes: containerIndexesToc,
+                                });
+                            const indexCurrentToc = current;
+
+                            fillLevels(indexesAncestorsToc, buildToc).push({
+                                text: textFromTransformer,
+                                id,
+                                index: indexCurrentToc,
+                                children: [],
+                            });
+
+                            preContent += `<span class="section"><a href="#${id}" class="link" title="Section link"></a></span>`;
+                            preContent += `<span class="index">${indexCurrentToc.join(".")}.</span>`;
+
+                            parent.children![parent.children!.indexOf(node)] = {
+                                type: "html",
+                                value: `<h${node.depth} id="${id}">${preContent}<span class="content">${textContent + allFromTransformer}</span></h${node.depth}>`,
+                            };
+
+                        } else if (node.type === "html") {
+                            if (/<script>/.test(node.value!)) nodeScript = node;
+                        } else if (node.type === "yaml") {
+                            nodeYaml = node
+                        } else if (node.type === "root") {
+                            node.children?.forEach((child) => walk(child, node));
+                        }
+
+                    }
+
                     let nodeYaml: Tree | null = null;
                     const usedIds: Record<string, number> = {};
                     const buildToc: Heading[] = [];
@@ -100,104 +155,43 @@ export default {
 
                     return (tree: Tree) => {
 
-                        function walk(node: Tree, parent: Tree) {
-
-                            if (node.type === "heading") {
-
-                                let textFromTransformer = "";
-                                let allFromTransformer = "";
-                                let textContent = "";
-                                let preContent = "";
-
-                                node.children?.forEach((child: Tree) => {
-                                    if (child.type === "text") {
-                                        let value = child.value || "";
-                                        textFromTransformer += value;
-                                        allFromTransformer += value;
-                                    } else if (child.type === "html") {
-                                        if (child.value) {
-                                            allFromTransformer += child.value;
-                                        }
-                                    }
-                                });
-
-                                const id = makeId(textFromTransformer);
-
-                                const { current, ancestors: indexesAncestorsToc } =
-                                    setIndexes({
-                                        level: node.depth!,
-                                        containerIndexes: containerIndexesToc,
-                                    });
-                                const indexCurrentToc = current;
-
-                                fillLevels(indexesAncestorsToc, buildToc).push({
-                                    text: textFromTransformer,
-                                    id,
-                                    index: indexCurrentToc,
-                                    children: [],
-                                });
-
-                                preContent += `<span class="section"><a href="#${id}" class="link" title="Section link"></a></span>`;
-                                preContent += `<span class="index">${indexCurrentToc.join(".")}.</span>`;
-
-                                parent.children![parent.children!.indexOf(node)] = {
-                                    type: "html",
-                                    value: `<h${node.depth} id="${id}">${preContent}<span class="content">${textContent + allFromTransformer}</span></h${node.depth}>`,
-                                };
-
-                            } else if (node.type === "html") {
-                                if (/<script>/.test(node.value!)) nodeScript = node;
-                            } else if (node.type === "yaml") {
-                                nodeYaml = node
-                            } else if (node.type === "root") {
-                                node.children?.forEach((child) => walk(child, node));
-                            }
-
-                        }
-
                         walk(tree, {});
 
-                        let treeChildLength = tree.children?.length || 0;
+                        let tocMarkup = '';
+                        let theEnd = '';
+                        if (buildToc.length > 1 || buildToc[0]?.children?.length) {
+                            tocMarkup = `<div class="container-toc"><I p="./svx/Toc.svelte" list='${JSON.stringify(buildToc).replace(/{/g, "&#123").replace(/}/g, "&#125")}' /></div>`;
+                            theEnd = '<div class="the-end" style="text-align:center;padding:1em 0 calc(100vh - 2em);line-height:1">⁂</div>';
+                        }
 
-                        if (treeChildLength > 0 && !nodeYaml || treeChildLength > 1) {
+                        tree.children!.splice((nodeScript ? tree.children!.indexOf(nodeScript) : nodeYaml ? tree.children!.indexOf(nodeYaml) : -1) + 1, 0, {
+                            type: "html",
+                            value: `<div class="body-svx">`,
+                        }, {
+                            type: "html",
+                            value: `${tocMarkup}<div class="container-content">`,
+                        });
 
-                            if (nodeScript) {
-                                const scriptContent = nodeScript.value || "";
-                                if (!/import\s+I\s+from\s+["']\..\/dynamic\.svelte['"]/.test(scriptContent)) {
+                        tree.children!.push({
+                            type: "html",
+                            value: `${theEnd}</div></div>`,
+                        });
 
-                                    tree.children![tree.children!.indexOf(nodeScript)] = {
-                                        type: "html",
-                                        value: scriptContent.replace(/<script>/, `<script>\nimport I from '../dynamic/I.svelte';\n`),
-                                    };
-                                }
+                        if (nodeScript) {
+                            const scriptContent = nodeScript.value || "";
+                            if (!/import\s+I\s+from\s+["']\..\/dynamic\.svelte['"]/.test(scriptContent)) {
 
-                            } else {
-                                tree.children!.splice(nodeYaml ? tree.children!.indexOf(nodeYaml) + 1 : 0, 0, {
+                                tree.children![tree.children!.indexOf(nodeScript)] = {
                                     type: "html",
-                                    value: `<script>\nimport I from '../dynamic/I.svelte';\n</script>`,
-                                });
+                                    value: scriptContent.replace(/<script>/, `<script>\nimport I from '../dynamic/I.svelte';\n`),
+                                };
                             }
 
-                            let tocMarkup = '';
-                            let theEnd = '';
-                            if (buildToc.length > 1 || buildToc[0]?.children?.length) {
-                                tocMarkup = `<div class="container-toc"><I p="./svx/Toc.svelte" list='${JSON.stringify(buildToc).replace(/{/g, "&#123").replace(/}/g, "&#125")}' /></div>`;
-                                theEnd = '<div class="the-end" style="text-align:center;padding:1em 0 calc(100vh - 2em);line-height:1">⁂</div>';
-                            }
-
-                            tree.children!.splice((nodeScript ? tree.children!.indexOf(nodeScript) : nodeYaml ? tree.children!.indexOf(nodeYaml) : -1) + 1, 0, {
+                        } else {
+                            tree.children!.splice(nodeYaml ? tree.children!.indexOf(nodeYaml) + 1 : 0, 0, {
                                 type: "html",
-                                value: `<div class="body-svx">`,
-                            }, {
-                                type: "html",
-                                value: `${tocMarkup}<div class="container-content">`,
+                                value: `<script>\nimport I from '../dynamic/I.svelte';\n</script>`,
                             });
-
-                            tree.children!.push({
-                                type: "html",
-                                value: `${theEnd}</div></div>`,
-                            });
-
                         }
 
                         if (nodeYaml) {
