@@ -159,7 +159,7 @@ export default {
 
                         let tocMarkup = '';
                         let theEnd = '';
-                        
+
                         if (buildToc.length > 1 || buildToc[0]?.children?.length) {
                             tocMarkup = `<div class="container-toc"><I p="./svx/Toc.svelte" list='${JSON.stringify(buildToc).replace(/{/g, "&#123").replace(/}/g, "&#125")}' /></div>`;
                             theEnd = '<div class="the-end" style="text-align:center;padding:1em 0 calc(100vh - 2em);line-height:1">⁂</div>';
